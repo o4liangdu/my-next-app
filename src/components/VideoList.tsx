@@ -6,7 +6,7 @@ interface Video {
   channel: string;
   views: string;
   timestamp: string;
-  duration: string;
+  size: string;
   thumbnail: string;
   videoUrl: string;
 }
@@ -45,9 +45,6 @@ export default function VideoList({ videos, currentVideoId, onVideoSelect }: Vid
             <div className="w-full h-full bg-gray-700 rounded-lg flex items-center justify-center">
               <div className="bg-gray-600 border-2 border-dashed rounded-xl w-16 h-16" />
             </div>
-            <span className="absolute bottom-1 right-1 bg-black bg-opacity-80 text-xs px-1 rounded">
-              {video.duration}
-            </span>
           </div>
           
           {/* Video Info */}
@@ -55,7 +52,13 @@ export default function VideoList({ videos, currentVideoId, onVideoSelect }: Vid
             <h4 className="font-medium line-clamp-2 text-sm">{video.title}</h4>
             <p className="text-gray-400 text-xs mt-1">{video.channel}</p>
             <p className="text-gray-500 text-xs">
-              {video.views} views • {video.timestamp}
+              {video.views} views
+            </p>
+            <p className="text-gray-500 text-xs">
+              {video.timestamp}
+            </p>
+            <p className="text-gray-500 text-xs">
+              {video.size}
             </p>
           </div>
         </div>

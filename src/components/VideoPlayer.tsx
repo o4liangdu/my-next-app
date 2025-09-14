@@ -8,7 +8,7 @@ interface Video {
   channel: string;
   views: string;
   timestamp: string;
-  duration: string;
+  size: string;
   thumbnail: string;
   videoUrl: string;
 }
@@ -110,7 +110,7 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
           type="range"
           min="0"
           max="100"
-          value={progress}
+          value={progress || ''}
           onChange={handleSeek}
           className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
         />
@@ -158,7 +158,6 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
           </div>
           
           <div className="flex items-center gap-4">
-            <span className="text-sm text-white">{video.duration}</span>
             <button 
               onClick={toggleFullscreen}
               className="text-white hover:text-gray-300"

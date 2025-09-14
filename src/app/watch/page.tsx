@@ -10,7 +10,7 @@ interface Video {
   channel: string;
   views: string;
   timestamp: string;
-  duration: string;
+  size: string;
   thumbnail: string;
   videoUrl: string;
 }
@@ -85,7 +85,7 @@ export default function WatchPage() {
                 <div>
                   <p className="text-gray-400">{currentVideo.channel}</p>
                   <p className="text-gray-500 text-sm">
-                    {currentVideo.views} views • {currentVideo.timestamp}
+                    {currentVideo.views} views • {currentVideo.timestamp} • {currentVideo.size}
                   </p>
                 </div>
                 <div className="flex gap-2">
