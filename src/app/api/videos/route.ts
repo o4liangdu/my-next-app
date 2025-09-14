@@ -8,6 +8,7 @@ const s3 = new AWS.S3({
   accessKeyId: r2Config.accessKeyId,
   secretAccessKey: r2Config.secretAccessKey,
   signatureVersion: 'v4',
+  region: 'auto', // Cloudflare R2 requires 'auto' region
 });
 
 export async function GET() {
