@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "compress-videos": "node scripts/compressVideos.js",
-    "compress-videos-bash": "bash scripts/compressVideos.sh"
+    "compress-videos-bash": "bash scripts/compressVideos.sh",
+    "init-db": "node scripts/initDatabase.js"
   },
   "dependencies": {
     "aws-sdk": "^2.1692.0",
+    "mongodb": "^6.9.0",
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0"
