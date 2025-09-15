@@ -17,7 +17,7 @@ export async function GET() {
     const data = await s3.listObjectsV2({ 
       Bucket: r2Config.bucketName 
     }).promise();
-    console.log(data, 111)
+    console.log(data, 'data from r2');
     
     // Filter for video files
     const videoFiles = data.Contents?.filter(file => {
@@ -38,9 +38,9 @@ export async function GET() {
       const lastModified = file.LastModified ? new Date(file.LastModified).toLocaleDateString() : 'Unknown';
       
       return {
-        id: `video-${index + 1}`,
+        id: file.ETag ? file.ETag.replace(/"/g, '') : `video-${index + 1}`,
         title: name,
-        channel: 'liangdo Videos',
+        channel: "liangdo's Videos",
         views: `${Math.floor(Math.random() * 1000) + 1}K views`,
         timestamp: lastModified,
         size: `${sizeInMB} MB`,

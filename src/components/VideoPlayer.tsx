@@ -24,6 +24,7 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -34,6 +35,22 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
       }
     }
   }, [isPlaying, video]);
+
+  // Get video duration when metadata is loaded
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      const handleLoadedMetadata = () => {
+        setDuration(videoElement.duration);
+      };
+      
+      videoElement.addEventListener('loadedmetadata', handleLoadedMetadata);
+      
+      return () => {
+        videoElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
+    }
+  }, [video]);
 
   const handleProgress = () => {
     if (videoRef.current) {
@@ -66,6 +83,13 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
       document.exitFullscreen();
       setIsFullscreen(false);
     }
+  };
+
+  // Format time in seconds to MM:SS format
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   return (
@@ -110,7 +134,7 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
           type="range"
           min="0"
           max="100"
-          value={progress || ''}
+          value={progress || 0}
           onChange={handleSeek}
           className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
         />
@@ -158,6 +182,11 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
           </div>
           
           <div className="flex items-center gap-4">
+            {/* Video duration display */}
+            <span className="text-white text-sm">
+              {formatTime(duration)}
+            </span>
+            
             <button 
               onClick={toggleFullscreen}
               className="text-white hover:text-gray-300"

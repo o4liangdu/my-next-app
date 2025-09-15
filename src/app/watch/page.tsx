@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoList from '@/components/VideoList';
 
@@ -16,6 +17,9 @@ interface Video {
 }
 
 export default function WatchPage() {
+  const searchParams = useSearchParams();
+  const videoId = searchParams.get('v');
+  
   const [videos, setVideos] = useState<Video[]>([]);
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,9 +32,23 @@ export default function WatchPage() {
         const response = await fetch('/api/videos');
         const data = await response.json();
         setVideos(data.videos);
-        if (data.videos.length > 0) {
+        
+        // Check if a specific video ID is requested via URL parameter
+        if (videoId && data.videos.length > 0) {
+          const requestedVideo = data.videos.find((video: Video) => video.id === videoId);
+          if (requestedVideo) {
+            setCurrentVideo(requestedVideo);
+            // Don't auto-play due to browser autoplay policies
+            // setIsPlaying(true); // Auto-play the requested video
+          } else {
+            // Fallback to first video if requested video not found
+            setCurrentVideo(data.videos[0]);
+          }
+        } else if (data.videos.length > 0) {
+          // Default to first video if no specific video requested
           setCurrentVideo(data.videos[0]);
         }
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching videos:', error);
@@ -39,7 +57,7 @@ export default function WatchPage() {
     };
 
     fetchVideos();
-  }, []);
+  }, [videoId]);
 
   const handleVideoSelect = (video: Video) => {
     setCurrentVideo(video);
