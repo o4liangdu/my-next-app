@@ -22,7 +22,7 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0.5);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [duration, setDuration] = useState(0);
 
@@ -36,10 +36,13 @@ export default function VideoPlayer({ video, isPlaying, onPlayPause }: VideoPlay
     }
   }, [isPlaying, video]);
 
-  // Get video duration when metadata is loaded
+  // Set initial volume and get video duration when metadata is loaded
   useEffect(() => {
     const videoElement = videoRef.current;
     if (videoElement) {
+      // Set initial volume
+      videoElement.volume = 0.5;
+      
       const handleLoadedMetadata = () => {
         setDuration(videoElement.duration);
       };

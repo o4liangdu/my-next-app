@@ -19,6 +19,7 @@ interface Video {
 export default function WatchPage() {
   const searchParams = useSearchParams();
   const videoId = searchParams.get("v");
+  const hideVideoList = searchParams.get("hideVideoList") === "1";
 
   const [videos, setVideos] = useState<Video[]>([]);
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
@@ -182,9 +183,9 @@ export default function WatchPage() {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">Video Player</h1>
 
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className={`flex flex-col ${hideVideoList ? '' : 'lg:flex-row'} gap-6`}>
           {/* Main Video Player */}
-          <div className="lg:w-2/3">
+          <div className={hideVideoList ? "w-full" : "lg:w-2/3"}>
             <div className="bg-black rounded-lg overflow-hidden">
               <VideoPlayer
                 video={currentVideo}
@@ -243,13 +244,15 @@ export default function WatchPage() {
           </div>
 
           {/* Video List */}
-          <div className="lg:w-1/3">
-            <VideoList
-              videos={videos}
-              currentVideoId={currentVideo.id}
-              onVideoSelect={handleVideoSelect}
-            />
-          </div>
+          {!hideVideoList && (
+            <div className="lg:w-1/3">
+              <VideoList
+                videos={videos}
+                currentVideoId={currentVideo.id}
+                onVideoSelect={handleVideoSelect}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
